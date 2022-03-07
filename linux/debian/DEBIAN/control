@@ -1,0 +1,9 @@
+Package: conpalette
+Version: 1.0.0
+Section: Utilities
+Priority: optional
+Architecture: amd64
+Essential: no
+Installed-Size: 216
+Maintainer: https://github.com/Lateralus138/conpalette
+Description: Display the 4bit colors of the current console

@@ -1,0 +1,5 @@
+conpalette_list=(
+  -h --help
+)
+complete -W "$(printf '%s\n' "${conpalette_list[@]}")" conpalette
+

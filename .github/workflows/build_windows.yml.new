@@ -1,0 +1,72 @@
+name: Build Solution
+
+on:
+  push:
+    paths:
+      - '**.cpp'
+      - '**.h'
+      - '**.sln'
+      - '**.yml'
+      - '**.ps1'
+
+jobs:
+  build_windows:
+    name: Build Solution
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.client_payload.sha }}
+    - uses: r-lib/actions/setup-r@master
+    - uses: r-lib/actions/setup-pandoc@master 
+    - uses: microsoft/setup-msbuild@v1.0.2
+    - name: Make Windows
+      run: |
+        & ./scripts/buildwindowsrelease.ps1
+        $conpalette_x86_md5_text = @'
+        {
+          "schemaVersion": 1,
+          "color": "00aedb",
+          "label": "conpalette-x86.exe MD5",
+          "message": "PLACEHOLDER",
+          "labelColor": "1d1d1d",
+          "style": "for-the-badge",
+          "namedLogo": "windows"
+        }
+        '@
+        New-Item -ItemType Directory -Force -Path '..\docs\json'
+        Write-Output "$conpalette_x86_md5_text" > ..\docs\json\conpalette_x86_md5.json
+        $file = "..\docs\json\conpalette_x86_md5.json"
+        $hash = $(Get-FileHash "..\release\conpalette-x86.exe" -Algorithm MD5).Hash
+        ((Get-Content -path $file -Raw) -replace 'PLACEHOLDER',$hash) | Set-Content -Path "$file"
+        $conpalette_x64_md5_text = @'
+        {
+          "schemaVersion": 1,
+          "color": "00aedb",
+          "label": "conpalette-x64.exe MD5",
+          "message": "PLACEHOLDER",
+          "labelColor": "1d1d1d",
+          "style": "for-the-badge",
+          "namedLogo": "windows"
+        }
+        '@
+        Write-Output "$conpalette_x64_md5_text" > ..\docs\json\conpalette_x64_md5.json
+        $file = "..\docs\json\conpalette_x64_md5.json"
+        $hash = $(Get-FileHash "..\release\conpalette-x64.exe" -Algorithm MD5).Hash
+        ((Get-Content -path $file -Raw) -replace 'PLACEHOLDER',$hash) | Set-Content -Path "$file"
+    - name: Push MD5
+      run: |
+        git config --global user.name "Lateralus138"
+        git config --global user.email "faithnomoread@yahoo.com"
+        git add docs/json
+        git commit -m "Uploaded MD5 - $((date))"
+        git push
+    - uses: ncipollo/release-action@v1
+      with:
+        allowUpdates: True
+        tag: 1.0.0.0
+        bodyFile: "./docs/md/release.md"
+        name: Stable Release
+        prerelease: False
+        artifacts: "./release/conpalette-x86.exe,./release/conpalette-x64.exe"
+        token: ${{ secrets.GITHUB_TOKEN }}

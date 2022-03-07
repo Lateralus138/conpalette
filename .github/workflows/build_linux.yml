@@ -1,0 +1,55 @@
+name: Linux Build
+
+on:
+  workflow_run:
+    workflows:
+      - Windows Build
+    types:
+      - completed
+
+jobs:
+  build_linux:
+    name: Build Linux
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Make Linux
+      run: |
+        cd linux || exit 1
+        make releasedynamicall || exit 2
+        chmod 755 ./release/dynamic/conpalette || exit 3
+        conpalette_linux_md5_text='{\n\t"schemaVersion": 1,\n\t"color": "2E9778",\n\t"label": "conpalette MD5",\n\t"message": "PLACEHOLDER",\n\t"labelColor": "1d1d1d",\n\t"style": "for-the-badge",\n\t"namedLogo": "linux"\n}'
+        if ! [[ -d "../docs/json" ]]; then
+          mkdir -p ../docs/json || exit 4
+        fi
+        if ! [[ -f "../docs/json/conpalette_linux_md5.json" ]]; then
+          touch ../docs/json/conpalette_linux_md5.json || exit 5
+        fi
+        echo -e "$conpalette_linux_md5_text" > ../docs/json/conpalette_linux_md5.json
+        sed -i "s/\"message\": \".*\"/\"message\": \"$(md5sum ./release/dynamic/conpalette | cut -d' ' -f 1)\"/g" ../docs/json/conpalette_linux_md5.json
+        cp -f ./release/dynamic/conpalette ./debian/usr/bin/ || exit 6
+        [[ -f "./debian/usr/bin/nomedia" ]] &&
+        rm -f "./debian/usr/bin/nomedia" || exit 7
+        dpkg-deb --build debian ./release/conpalette.deb || exit 8
+        conpalette_debian_md5_text='{\n\t"schemaVersion": 1,\n\t"color": "2E9778",\n\t"label": "conpalette.deb MD5",\n\t"message": "PLACEHOLDER",\n\t"labelColor": "1d1d1d",\n\t"style": "for-the-badge",\n\t"namedLogo": "debian"\n}'
+        if ! [[ -f "../docs/json/conpalette_debian_md5.json" ]]; then
+          touch ../docs/json/conpalette_debian_md5.json
+        fi
+        echo -e "$conpalette_debian_md5_text" > ../docs/json/conpalette_debian_md5.json
+        sed -i "s/\"message\": \".*\"/\"message\": \"$(md5sum ./release/conpalette.deb | cut -d' ' -f 1)\"/g" ../docs/json/conpalette_debian_md5.json
+    - name: Push Linux MD5
+      run: |
+        git config --global user.name "Lateralus138"
+        git config --global user.email "faithnomoread@yahoo.com"
+        git add docs/json
+        git commit -m "Uploaded MD5 - $(date)"
+        git push
+    - uses: ncipollo/release-action@v1
+      with:
+        allowUpdates: True
+        tag: 1.0.0.0
+        bodyFile: "./docs/md/release.md"
+        name: Stable Release
+        prerelease: False
+        artifacts: "./linux/release/conpalette.deb,./linux/release/dynamic/conpalette"
+        token: ${{ secrets.GITHUB_TOKEN }}

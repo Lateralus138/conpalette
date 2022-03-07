@@ -1,0 +1,47 @@
+name: MacOs Build
+
+on:
+  workflow_run:
+    workflows:
+      - Linux Build
+    types:
+      - completed
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Make MacOs
+      run: |
+        cd linux || exit 1
+        g++ -std=c++17 src/conpalette.cpp -o conpalette.macos || exit 2
+        chmod 755 conpalette.macos || exit 3
+        md5 conpalette.macos || exit 4
+        conpalette_macos_md5_text='{\n\t"schemaVersion": 1,\n\t"color": "2E9778",\n\t"label": "conpalette.macos MD5",\n\t"message": "PLACEHOLDER",\n\t"labelColor": "1d1d1d",\n\t"style": "for-the-badge",\n\t"namedLogo": "macos"\n}'
+        if ! [[ -d "../docs/json" ]]; then
+          mkdir -p ../docs/json || exit 5
+        fi
+        if ! [[ -f "../docs/json/conpalette_macos_md5.json" ]]; then
+          touch ../docs/json/conpalette_macos_md5.json || exit 6
+        fi
+        echo -e "$conpalette_macos_md5_text" > ../docs/json/conpalette_macos_md5.json || exit 7
+        sed -i '' "s/\"message\": \".*\"/\"message\": \"$(md5 conpalette.macos | cut -d' ' -f 4)\"/g" ../docs/json/conpalette_macos_md5.json || exit 8
+    - uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: Built MacOs Binary
+        add_options: '--force'
+        push_options: '--force'
+        file_pattern: docs/json/*
+        commit_user_name: Lateralus138
+        commit_user_email: faithnomoread@yahoo.com
+        status_options: '--untracked-files=no'
+    - uses: ncipollo/release-action@v1
+      with:
+        allowUpdates: True
+        tag: 1.0.0.0
+        bodyFile: "./docs/md/release.md"
+        name: Stable Release
+        prerelease: False
+        artifacts: "./linux/conpalette.macos"
+        token: ${{ secrets.GITHUB_TOKEN }}
