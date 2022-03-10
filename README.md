@@ -17,8 +17,10 @@ Display the 4bit colors of the current console&#46;
     - [Current Windows X86 MD5](#current-windows-x86-md5)
     - [Current Windows X64 MD5](#current-windows-x64-md5)
     - [Current Linux MD5](#current-linux-md5)
-    - [Curent Debian MD5](#curent-debian-md5)
-    - [Curent MacOs MD5](#curent-macos-md5)
+    - [Current Debian MD5](#current-debian-md5)
+    - [Current MacOs MD5](#current-macos-md5)
+    - [Current Android 32 Bit MD5](#current-android-32-bit-md5)
+    - [Current Android 64 Bit MD5](#current-android-64-bit-md5)
   - [Media](#media)
     - [Logo](#logo)
     - [Help Screen](#help-screen)
@@ -116,14 +118,22 @@ This information is generated in a *GitHub Action* immediately after the success
 
 ![Linux MD5](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Lateralus138/conpalette/master/docs/json/conpalette_linux_md5.json)
 
-### Curent Debian MD5
+### Current Debian MD5
 
 ![Debian MD5](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Lateralus138/conpalette/master/docs/json/conpalette_debian_md5.json)
 
 
-### Curent MacOs MD5
+### Current MacOs MD5
 
 ![MacOs MD5](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Lateralus138/conpalette/master/docs/json/conpalette_macos_md5.json)
+
+### Current Android 32 Bit MD5
+
+![Android 32 MD5](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Lateralus138/conpalette/master/docs/json/conpalette_android_32_md5.json)
+
+### Current Android 64 Bit MD5
+
+![Android 32 MD5](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Lateralus138/conpalette/master/docs/json/conpalette_android_64_md5.json)
 
 ---
 

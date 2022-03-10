@@ -33,10 +33,26 @@ jobs:
         dpkg-deb --build debian ./release/conpalette.deb || exit 8
         conpalette_debian_md5_text='{\n\t"schemaVersion": 1,\n\t"color": "2E9778",\n\t"label": "conpalette.deb MD5",\n\t"message": "PLACEHOLDER",\n\t"labelColor": "1d1d1d",\n\t"style": "for-the-badge",\n\t"namedLogo": "debian"\n}'
         if ! [[ -f "../docs/json/conpalette_debian_md5.json" ]]; then
-          touch ../docs/json/conpalette_debian_md5.json
+          touch ../docs/json/conpalette_debian_md5.json  || exit 9
         fi
-        echo -e "$conpalette_debian_md5_text" > ../docs/json/conpalette_debian_md5.json
-        sed -i "s/\"message\": \".*\"/\"message\": \"$(md5sum ./release/conpalette.deb | cut -d' ' -f 1)\"/g" ../docs/json/conpalette_debian_md5.json
+        echo -e "$conpalette_debian_md5_text" > ../docs/json/conpalette_debian_md5.json  || exit 10
+        sed -i "s/\"message\": \".*\"/\"message\": \"$(md5sum ./release/conpalette.deb | cut -d' ' -f 1)\"/g" ../docs/json/conpalette_debian_md5.json  || exit 11
+        sudo apt update  || exit 12
+        sudo apt install g++-arm-linux-gnueabihf g++-aarch64-linux-gnu -y  || exit 13
+        arm-linux-gnueabihf-g++ -static -march=armv8.5-a -O3 -std=c++17 src/conpalette.cpp -o conpalette.arm32  || exit 14
+        aarch64-linux-gnu-g++ -static -march=armv8.5-a -O3 -std=c++17 src/conpalette.cpp -o conpalette.aarch64 || exit 15
+        conpalette_android_32_md5_text='{\n\t"schemaVersion": 1,\n\t"color": "2E9778",\n\t"label": "conpalette.arm32 MD5",\n\t"message": "PLACEHOLDER",\n\t"labelColor": "1d1d1d",\n\t"style": "for-the-badge",\n\t"namedLogo": "android"\n}'
+        conpalette_android_64_md5_text='{\n\t"schemaVersion": 1,\n\t"color": "2E9778",\n\t"label": "conpalette.aarch46 MD5",\n\t"message": "PLACEHOLDER",\n\t"labelColor": "1d1d1d",\n\t"style": "for-the-badge",\n\t"namedLogo": "android"\n}'
+        if ! [[ -f "../docs/json/conpalette_android_32_md5.json" ]]; then
+          touch ../docs/json/conpalette_android_32_md5.json || exit 16
+        fi
+        if ! [[ -f "../docs/json/conpalette_android_64_md5.json" ]]; then
+          touch ../docs/json/conpalette_android_64_md5.json || exit 17
+        fi
+        echo -e "$conpalette_android_32_md5_text" > ../docs/json/conpalette_android_32_md5.json || exit 18
+        sed -i "s/\"message\": \".*\"/\"message\": \"$(md5sum ./conpalette.arm32 | cut -d' ' -f 1)\"/g" ../docs/json/conpalette_android_32_md5.json  || exit 19
+        echo -e "$conpalette_android_64_md5_text" > ../docs/json/conpalette_android_64_md5.json || exit 20
+        sed -i "s/\"message\": \".*\"/\"message\": \"$(md5sum ./conpalette.aarch64 | cut -d' ' -f 1)\"/g" ../docs/json/conpalette_android_64_md5.json || exit 21    
     - name: Push Linux MD5
       run: |
         git config --global user.name "Lateralus138"
@@ -51,5 +67,5 @@ jobs:
         bodyFile: "./docs/md/release.md"
         name: Stable Release
         prerelease: False
-        artifacts: "./linux/release/conpalette.deb,./linux/release/dynamic/conpalette"
+        artifacts: "./linux/release/conpalette.deb,./linux/release/dynamic/conpalette,./linux/conpalette.arm32,./linux/conpalette.aarch64"
         token: ${{ secrets.GITHUB_TOKEN }}
