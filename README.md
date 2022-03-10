@@ -79,7 +79,7 @@ Where and how to use this program&#46;
   <p>
   Like any cli tool &#40;or any executable for that matter&#41; this can be used in any available command line program&#47;emulator in <b>Windows</b> like <b>CMD</b> or <b>PowerShell</b>&#44; for example&#44; and should work in most available terminals&#46;
   
-  This is a cross&#45;platform program and has been compiled for Windows&#44; Linux&#44; MacOS&#44; and Android &#40;Termux&#41;&#44; but can the source is readily available and can be more than likely be built for most platforms&#46;
+  This is a cross&#45;platform program and has been compiled for Windows&#44; Linux&#44; MacOS&#44; and Android &#40;Termux&#41;&#44; but the source is readily available and can be more than likely be built for most platforms&#46;
 
   The MacOs version has not been tested well &#40;only in a CI&#41; so if there any issues and you are in a direct MacOs environment and want to fork and work on the project yourself and or contribute to this project then you are free to do so as per the license provided&#46;
 
