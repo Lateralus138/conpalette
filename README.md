@@ -4,7 +4,6 @@
 
 Display the 4bit colors of the current console&#46;
 
-
 - [Console Palette](#console-palette)
   - [About](#about)
     - [Description](#description)
@@ -26,6 +25,7 @@ Display the 4bit colors of the current console&#46;
     - [Help Screen](#help-screen)
     - [Demo Screen](#demo-screen)
   - [LICENSE](#license)
+  - [Support Me If You Like](#support-me-if-you-like)
 
 ---
 
@@ -179,6 +179,8 @@ This information is generated in a *GitHub Action* immediately after the success
 </details>
 
 ---
+
+## Support Me If You Like
 
 If you like this project and care to donate to my ***PayPal***:
 
