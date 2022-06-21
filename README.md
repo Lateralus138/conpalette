@@ -177,3 +177,13 @@ This information is generated in a *GitHub Action* immediately after the success
   This program is distributed in the hope that it will be useful&#44; but WITHOUT ANY WARRANTY&#59; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE&#46;  See the GNU General Public License for more details&#46;
   </blockquote>
 </details>
+
+---
+
+If you like this project and care to donate to my ***PayPal***:
+
+[![PayPal Donation](docs/media/images/paypal_donate_button.png)](https://paypal.me/ianapride?locale.x=en_US)
+
+Or ***Buy Me A Coffee*** if your prefer:
+
+[![Buy Me A Coffee](./docs/media/images/buymeacoffe_a.png)](https://www.buymeacoffee.com/ianalanpride)
